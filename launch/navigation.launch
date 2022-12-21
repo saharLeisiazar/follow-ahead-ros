@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+  <param name="/use_sim_time" value="false"/>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen"> <!--output="screen"-->
+    <param name="controller_frequency" value="10"/>
+    <!--param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /-->
+    <param name="TrajectoryPlannerROS/max_vel_x" value= "0.2" />
+    <param name="TrajectoryPlannerROS/max_vel_theta" value= "0.5" />
+    <param name="TrajectoryPlannerROS/min_vel_theta" value= "-0.5" />
+    <param name="TrajectoryPlannerROS/holonomic_robot" value= "false"/>
+    <param name="TrajectoryPlannerROS/yaw_goal_tolerance" value= "0.2"/>
+    <param name="TrajectoryPlannerROS/xy_goal_tolerance" value= "0.2"/>
+    <param name="TrajectoryPlannerROS/latch_xy_goal_tolerance" value= "false"/>
+    <param name="TrajectoryPlannerROS/min_in_place_vel_theta" value="0.3"/>
+    <rosparam file="$(find follow-ahead)/include/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+    <rosparam file="$(find follow-ahead)/include/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find follow-ahead)/include/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find follow-ahead)/include/global_costmap_params.yaml" command="load" /> 
+    <rosparam file="$(find follow-ahead)/include/base_local_planner_params.yaml" command="load" />
+    <remap from="/cmd_vel" to="/mobile_base/commands/velocity"/> 
+  </node>
+  
+  <?ignore 
+  <node pkg="nodelet" type="nodelet" name="teleop_velocity_smoother" args="load yocs_velocity_smoother/VelocitySmootherNodelet mobile_base_nodelet_manager">
+    <rosparam file="$(find my_robot_navigation)/param/smootherparam.yaml" command="load"/>
+    <remap from="teleop_velocity_smoother/raw_cmd_vel" to="cmd_vel"/>
+    <remap from="teleop_velocity_smoother/smooth_cmd_vel" to="mobile_base/commands/velocity"/>
+
+    <!-- Robot velocity feedbacks; use the one configured as base default -->
+    <remap from="teleop_velocity_smoother/odometry" to="integerated_to_init"/>
+  <!--  <remap from="teleop_velocity_smoother/robot_cmd_vel" to="mobile_base/commands/velocity"/>-->
+  </node>
+  ?>
+  
+</launch>
