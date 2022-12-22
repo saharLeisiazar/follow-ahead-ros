@@ -3,9 +3,9 @@ import queue
 import sys
 sys.path.insert(0, '/home/sahar/Follow-ahead-3/MCTS/scripts')
 import human_traj
-from nodes import MCTSNode
-from search import MCTS
-from navi_state import navState
+from nodes_obs import MCTSNode
+from search_obs import MCTS
+from navi_state_obs import navState
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 import torch
@@ -46,18 +46,27 @@ class node():
         self.MCTS_params['num_rollout'] = 5
         self.time = time.time()
         self.stay_bool = True
+        print('hello')
+
         
 
     def map_callback(self, data):
-        self.map_info= {}
-        self.map_info['height'] = data.info.height
-        self.map_info['width'] =  data.info.width
-        self.map_info['origin_x'] = data.info.origin.position.x
-        self.map_info['origin_y'] = data.info.origin.position.y
-        self.map_info['res'] = data.info.resolution
-        self.map_info['data'] = data.data
+        map_info= {}
+        map_info['height'] = data.info.height
+        map_info['width'] =  data.info.width
+        map_info['origin_x'] = data.info.origin.position.x
+        map_info['origin_y'] = data.info.origin.position.y
+        map_info['res'] = data.info.resolution
+        map_info['data'] = data.data
         # print(self.map_info['data'][0:20])
-
+        self.MCTS_params['map_info'] = map_info
+        #################### comment this late
+        self.state = np.array([[0,0,0],[1.5,0,0]] ) 
+        Traj_list = np.array([[1.5,0,0],[1.6,0,0],[1.7,0,0],[1.8,0,0],[1.9,0,0],[2,0,0]])
+        Traj_dic={}
+        Traj_dic['traj'] = Traj_list
+        
+        self.expand_tree([Traj_dic])
 
     def odom_callback(self,data):
         robot_p = data.pose.pose.position
@@ -112,10 +121,10 @@ class node():
 
 
     def expand_tree(self, human_traj):
-        print()
-        print()
-        print('current state:')
-        print(self.state)
+        # print()
+        # print()
+        # print('current state:')
+        # print(self.state)
 
         if not self.stay():
             self.MCTS_params['human_traj'] = human_traj
@@ -128,8 +137,9 @@ class node():
             # robot_best_node, reward, idx = mcts.best_action(0, 0) 
             # print("leaf node: ", leaf_node.state.state)
             # self.generate_goal(leaf_node.state.state)
-            print('robot"action: ',self.robot_actions[robot_best_node[2]])
-            self.generate_goal(robot_best_node[2])
+            if robot_best_node is not None:
+                print('robot"action: ',self.robot_actions[robot_best_node[2]])
+                self.generate_goal(robot_best_node[2])
             self.time += 1
         else:
             print("Waiting ...")
