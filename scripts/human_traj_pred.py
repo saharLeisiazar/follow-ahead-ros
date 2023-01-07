@@ -1,29 +1,84 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import numpy as np
 from zed_interfaces.msg import ObjectsStamped
-from geometry_msgs.msg import Pose, PoseArray
+from geometry_msgs.msg import Pose, PoseArray, TransformStamped
 import time
-
+import warnings
+warnings.simplefilter('ignore', np.RankWarning)
 
 class human_traj_prediction():
     def __init__(self):
         rospy.init_node('prediction', anonymous=True)
 
-        rospy.Subscriber('/zed2/zed_node/obj_det/objects', ObjectsStamped, self.predictions_callback)
+        rospy.Subscriber('/vicon/sahar_helmet/sahar_helmet', TransformStamped, self.helmet_callback)
+
+        # rospy.Subscriber('/zed2/zed_node/obj_det/objects', ObjectsStamped, self.predictions_callback)
         self.pub_cur_pose = rospy.Publisher('/person_pose', Pose, queue_size = 1)
-        self.pub_pred_pose_1 = rospy.Publisher('/person_pose_pred_1', Pose, queue_size = 1)
+        self.pub_pred_pose_1 = rospy.Publisher('/person_pose_pred_2', Pose, queue_size = 1)
         self.pub_pred_pose_all = rospy.Publisher('/person_pose_pred_all', PoseArray, queue_size = 1)
 
         self.t_values = []
         self.x_values = []
         self.y_values = []
-        self.init_time_1 = time.time()
-        self.init_time_2 = time.time()
-        self.init_time_3 = time.time()
-        self.init_time_4 = time.time()
-        self.init_time_5 = time.time()
+        self.p_x_filt = []
+        self.p_y_filt = []
+
+
+    def helmet_callback(self, data):
+        position = data.transform.translation
+
+        self.p_x_filt.append(position.x)
+        self.p_y_filt.append(position.y)
+
+        if len(self.p_x_filt) > 30:
+            self.p_x_filt.pop(0)
+            self.p_y_filt.pop(0)
+
+        x = np.mean(self.p_x_filt)    
+        y = np.mean(self.p_y_filt) 
+
+        poseArray = PoseArray()
+        poseArray.header.frame_id = 'map'
+        poseArray.header.stamp = rospy.Time.now()
+
+        pose = Pose()
+        pose.position.x = x
+        pose.position.y = y
+        pose.position.z = 0
+        self.pub_cur_pose.publish(pose)
+
+        self.t_values.append(float(time.time()))
+        self.x_values.append(x)
+        self.y_values.append(y)
+
+        if len(self.x_values) > 1 * 120:     # sampling_freq:
+            self.t_values.pop(0)
+            self.x_values.pop(0)
+            self.y_values.pop(0)
+
+            # self.init_time = time.time()
+
+        if len(self.x_values) > 100:
+            coef_x = np.polyfit(self.t_values, self.x_values, 10)
+            coef_y = np.polyfit(self.t_values, self.y_values, 10)
+            p_x = np.poly1d(coef_x)
+            p_y = np.poly1d(coef_y)
+
+            for i in range(6):
+                msg = Pose()
+                msg.position.x = p_x(self.t_values[-1]+ 0.4*(i))
+                msg.position.y = p_y(self.t_values[-1]+ 0.4*(i))
+                msg.orientation.z = np.arctan2(msg.position.y- p_y(self.t_values[-1]+ 0.4*(i-1)) , msg.position.x -p_x(self.t_values[-1]+ 0.4*(i-1)) )
+
+
+                poseArray.poses.append(msg)
+
+            self.pub_pred_pose_all.publish(poseArray)
+            self.pub_pred_pose_1.publish(msg)
+
+
 
     def predictions_callback(self,data):
         if len(data.objects) and data.objects[0].label == 'Person':
@@ -53,8 +108,8 @@ class human_traj_prediction():
                 # self.init_time = time.time()
 
             if len(self.x_values) > 20:
-                coef_x = np.polyfit(self.t_values, self.x_values, 1)
-                coef_y = np.polyfit(self.t_values, self.y_values, 1)
+                coef_x = np.polyfit(self.t_values, self.x_values, 5)
+                coef_y = np.polyfit(self.t_values, self.y_values, 5)
                 p_x = np.poly1d(coef_x)
                 p_y = np.poly1d(coef_y)
 

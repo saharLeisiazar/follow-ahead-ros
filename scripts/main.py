@@ -2,7 +2,7 @@
 import queue
 import sys
 sys.path.insert(0, '/home/sahar/Follow-ahead-3/MCTS/scripts')
-import human_traj
+import human_traj_t
 from nodes import MCTSNode
 from search import MCTS
 from navi_state import navState
@@ -32,7 +32,7 @@ class node():
         self.pub_goal = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size =1)
         self.pub_human_pose = rospy.Publisher('/human_pose', Marker, queue_size = 1)
 
-        self.robot_actions, _ = human_traj.trajectories(15)
+        self.robot_actions, _ = human_traj_t.trajectories(15)
         self.state = np.zeros((2,3))
         self.MCTS_params = {}
         self.MCTS_params['robot_actions'] = self.robot_actions

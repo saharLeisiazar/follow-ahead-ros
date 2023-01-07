@@ -164,6 +164,7 @@ include_directories(
    scripts/human_traj_pred.py
    scripts/test.py
    scripts/main_obs.py
+   scripts/crop_map.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

@@ -118,6 +118,3 @@ def trajectories(length):
 
     return robot_actions, human_traj_list      
 
-if __name__ == '__main__':
-    robot_actions, human_traj_list   = trajectories(15)
-    print(robot_actions)
