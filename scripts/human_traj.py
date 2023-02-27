@@ -95,9 +95,9 @@ def trajectories(length):
 
 
     ############ robot action space with linear velocity in x and angular vel
-    TS = 0.4
-    robot_angle_acts = np.arange(-1, 2) * 30 * np.pi /180 /TS
-    robot_vel_acts = np.array([0.1, 0.2]) /TS
+    TS = 0.5
+    robot_angle_acts = np.arange(-2, 3) * 30 * np.pi /180 /TS
+    robot_vel_acts = np.array([0.3]) /TS
     robot_actions = [[0,0]]
     for i in range(len(robot_vel_acts)):
         for j in range(len(robot_angle_acts)):
