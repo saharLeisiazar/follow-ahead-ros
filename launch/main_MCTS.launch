@@ -2,10 +2,7 @@
 <launch>
 	<node pkg="follow-ahead" type='main_obs.py' name='main_obs' output='screen'/>
 	<include file='$(find zed_wrapper)/launch/zed2.launch'/>
-	<!--node pkg='pose_publisher' type='body_tracking.py' name='body_tracking'/-->
-	<!--node pkg='rosbag' type='play' name='bag' args='/home/sahar/catkin_ws/src/follow-ahead/bag/person_pose_pred_all_slower.bag'/-->
 	<node pkg='follow-ahead' type='human_traj_pred.py' name='human_traj_pred' output='log'/>
-	<node pkg="follow-ahead" type='recording.py' name='recording' output='screen'/>
 
 	<node pkg="rviz" type="rviz" name="rviz" args="-d /home/sahar/catkin_ws/src/follow-ahead-ros/rviz.rviz"/>
 </launch> 
