@@ -1,4 +1,4 @@
-from nodes import MCTSNode
+from nodes_obs import MCTSNode
 import numpy as np
 import copy
 

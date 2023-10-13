@@ -20,8 +20,8 @@ from visualization_msgs.msg import Marker
  
 
 #pose of camera in map frame
-camera2map_trans = [3.3, 3.2, 0]
-camera2map_rot = [0,0, -130*np.pi/180]
+camera2map_trans = [4.8, 3.42, 0]
+camera2map_rot = [0,0, -120*np.pi/180]
 
 
 

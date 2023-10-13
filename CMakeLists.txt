@@ -162,10 +162,10 @@ include_directories(
  catkin_install_python(PROGRAMS
    scripts/main.py
    scripts/human_traj_pred.py
-   scripts/test.py
+   #scripts/test.py
    scripts/main_obs.py
-   scripts/crop_map.py
-   scripts/recording.py
+   #scripts/crop_map.py
+   #scripts/recording.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
