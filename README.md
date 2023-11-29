@@ -1,8 +1,12 @@
-Robotic Follow-Ahead with Obstacle and Occlusion Avoidance
+# Robotic Follow-Ahead with Obstacle and Occlusion Avoidance
+This is a repository for the paper ["An MCTS-DRL Based Obstacle and Occlusion Avoidance Methodology in Robotic Follow-Ahead Applications"](https://arxiv.org/pdf/2309.16884.pdf) presented at IROS 2023 conference. 
 
 
 Our methodology employs a high-level decision-making algorithm that strategically navigates a mobile robot in front of a person while 
 avoiding collision and occlusion in any environment.
+
+![alt text](images/Abstract-image.png)
+
 
 A DQN model (Q-model) of the robot is integrated with Monte Carlo Tree Search (MCTS) in order to enhance the performance of the decision-making process. 
 The DQN package contains the code to train the Q-model. A simulation environment is written to input a state and action and calculate the corresponding next state and reward. Also, a pre-trained model is provided under the /models directory which is trained in an obstacle-free environment. The model inputs the relative pose of the robot with respect to the human and outputs the expected return of taking each action. The actions are going straight, turning left or right.
