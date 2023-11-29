@@ -18,12 +18,13 @@ The MCTS package contains the codes to expand a tree at each time step and find 
 
 ## Prerequisites:
 1. An occupancy map of the environment
-2. A module to output the position of the human. We used ZED2 camera and ZED-ros-wrapper package that publishes '/zed2/zed_node/obj_det/objects' topic. You can change the topic in the 'human_traj_pred.py' file.
-3. ROS (Noetic version is preferred)
+2. A module to output the position of the human. We used ZED2 camera and ZED-ros-wrapper package that publishes '/zed2/zed_node/obj_det/objects' topic. You can change this topic in the 'human_traj_pred.py' file.
+
 
 ## Getting Started:
-1. Please refer to the installation.txt file to set up the proper version of the libraries.
-2. Run the '.launch' file using roslaunch 
+1. ROS (Noetic version is preferred)
+2. Please refer to the setup.txt file to install the proper version of the libraries.
+3. Run the '.launch' file using roslaunch 
 
 
 
