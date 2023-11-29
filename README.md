@@ -13,6 +13,9 @@ The DQN package contains the code to train the Q-model. A simulation environment
 
 The MCTS package contains the codes to expand a tree at each time step and find the best navigational goal for the robot. The trained Q-model is used during the tree expansion process to evaluate each node of the tree.
 
+## Experiments:
+![alt text](images/mcts.gif)
+
 ## Prerequisites:
 1. An occupancy map of the environment
 2. A module to output the position of the human. We used ZED2 camera and ZED-ros-wrapper package that publishes '/zed2/zed_node/obj_det/objects' topic. You can change the topic in the 'human_traj_pred.py' file.
