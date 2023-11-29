@@ -33,11 +33,13 @@ The MCTS package contains the codes to expand a tree at each time step and find 
 If you happen to use the code for your research, please cite the following paper
 
 ```
-@article{leisiazar2023mcts,
-  title={An MCTS-DRL Based Obstacle and Occlusion Avoidance Methodology in Robotic Follow-Ahead Applications},
-  author={Leisiazar, Sahar and Park, Edward J and Lim, Angelica and Chen, Mo},
-  journal={arXiv preprint arXiv:2309.16884},
-  year={2023}
+@inproceedings{leisiazar2022real,
+  title={Real-time Mapping of Multi-Floor Buildings Using Elevators},
+  author={Leisiazar, Sahar and Mahdavian, Mohammad and Park, Edward J and Chen, Mo},
+  booktitle={2022 IEEE/ASME International Conference on Advanced Intelligent Mechatronics (AIM)},
+  pages={314--321},
+  year={2022},
+  organization={IEEE}
 }
 
 ```
