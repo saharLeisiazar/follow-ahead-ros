@@ -17,17 +17,14 @@ from geometry_msgs.msg import PoseArray, PoseStamped
 import time
 from visualization_msgs.msg import Marker
 
- 
 
-#pose of camera in map frame
-camera2map_trans = [4.8, 3.42, 0]
-camera2map_rot = [0,0, -120*np.pi/180]
-
+# Initial pose of camera with respect to the robot's init pose
+camera2map_trans = [5.8, 1.3, 0]
+camera2map_rot = [0,0, -150*np.pi/180]
 
 
 class node():
     def __init__(self):
-        # rospy.init_node('follow', anonymous=False)
         rospy.Subscriber("odom", Odometry, self.odom_callback, buff_size=1)
         rospy.Subscriber("person_pose_pred_all", PoseArray, self.human_pose_callback, buff_size=1)
 
@@ -40,8 +37,8 @@ class node():
 
         self.MCTS_params = {}
         self.MCTS_params['robot_actions'] = self.robot_actions
-        file_name = '[angle_45(dt:0.5)[3actions]][DQN]dataset:angle_45(dt:0.5)[3actions]n:500-nLayers:1-lsize:16-bs:218-lr:0.01-ep:15-test:15-tar_up50-aSize1-aStep45'
-        model_directory = '/home/sahar/Follow-ahead-3/DQN/models/selected ones/' + file_name + '.pt'
+        file_name = 'RL_model.pt'
+        model_directory = '/path_to_model/' + file_name 
         model = torch.load(model_directory)
         self.MCTS_params['model'] = model
         self.MCTS_params['use_model'] = True
@@ -52,7 +49,6 @@ class node():
         self.updateGoal = 1
 
         self.goal_ind=0
-
         
 
     def odom_callback(self,data):
@@ -161,7 +157,7 @@ class node():
             beta = np.arctan2(s[0,1] - s[1,1] , s[0,0] - s[1,0])   # atan2 (yr - yh  , xr - xh)           
             alpha = np.absolute(s[1,2] - beta) *180 /np.pi  #angle between the person-robot vector and the person-heading vector         
     
-            if D > 2:
+            if D > 2.2:
                 return True
 
             self.stay_bool = False

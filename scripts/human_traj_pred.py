@@ -41,14 +41,6 @@ class human_traj_prediction():
             x = np.mean(self.p_x_filt)    
             y = np.mean(self.p_y_filt) 
 
-            camera2map_trans = [5.8, 1.3]   # Initial position of camera with respect to the robot's init position
-            camera2map_rot = [0,0, -150*np.pi/180]  # Initial orientation of camera with respect to the robot's init orientation
-            rot_yaw = camera2map_rot[2]
-            R_tran = [[np.cos(rot_yaw), -1*np.sin(rot_yaw)], [np.sin(rot_yaw), np.cos(rot_yaw)]]
-            new_elem= list(np.add(np.dot(R_tran , [x,y]), camera2map_trans))
-            x = new_elem[0]
-            y = new_elem[1]
-
             poseArray = PoseArray()
             poseArray.header.frame_id = 'camera'
             poseArray.header.stamp = rospy.Time.now()
