@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <launch>
-	<node pkg='pose_publisher' type='body_tracking.py' name='body_tracking'/>
 	<include file="$(find rplidar_ros)/launch/rplidar.launch"/>
 	<node pkg="tf2_ros" type="static_transform_publisher" name="laser2base"  args="0 0 0 0 0 0 1 /base_footprint    /laser" />
 	<include file="$(find follow-ahead)/launch/slam_gmapping.launch"/>
