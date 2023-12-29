@@ -72,20 +72,11 @@ class DQNCritic():
         torch.save(self.q_net, self.params['save_dir'] +'models/['+self.params['dataset_name']+']' +self.params['exp_name']+'.pt')
         print("Network saved")
         
-    def normilize(self, data):
-        
-        if data.shape[0] == self.params['batch_size']:
-            mean = np.mean(data, axis = 1) 
-            mean = mean[:, np.newaxis]
-            std = np.std(data, axis = 1)
-            std = std[:, np.newaxis]
-            
-        else:
-            mean = np.mean(data)
-            std = np.std(data)
-        
-        
-        return (data - mean)/std
+    def normilize(self, data):           
+        mean = np.mean(data, axis=0)
+        std = np.std(data, axis=0)  
+        return (data - mean) / std
+
         
         
         
